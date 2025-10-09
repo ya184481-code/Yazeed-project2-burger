@@ -7,6 +7,7 @@ on:
 
 env:
   TF_AUTHOR: "ibrahim-221"
+  TF_DB_ADMIN: "ibrahim"
   TF_RESOURCE_PREFIX: "ibra-53"
   TF_RG_NAME: "ibra-new22"
   TF_RG_LOCATION: "canadacentral"
@@ -52,6 +53,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Java (for Maven)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
       - name: Build backend (Maven)
         run: |
           cd ${{ env.BACK_DIR }}
@@ -91,14 +98,10 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACK_IMAGE_NAME }}:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACK_IMAGE_NAME }}:latest
 
-      - name: Azure Login
+      - name: Azure Login (Service Principal)
         uses: azure/login@v2
         with:
-          auth-type: 'service-principal'
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -114,14 +117,16 @@ jobs:
         run: |
           terraform plan -input=false -out=tfplan \
             -var "author=${{ env.TF_AUTHOR }}" \
+            -var "db_admin=${{ env.TF_DB_ADMIN }}" \
+            -var "db_password=${{ secrets.TF_DB_PASSWORD }}" \
             -var "resource_prefix=${{ env.TF_RESOURCE_PREFIX }}" \
             -var "resource_group_name=${{ env.TF_RG_NAME }}" \
             -var "resource_group_location=${{ env.TF_RG_LOCATION }}" \
             -var "contact_person_name=${{ env.TF_CONTACT_NAME }}" \
             -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
+            -var "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
             -var "fe_port=${{ env.TF_FE_PORT }}" \
             -var "be_port=${{ env.TF_BE_PORT }}" \
-            -var "db_password=${{ secrets.TF_DB_PASSWORD }}" \
             -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/frontendapp:${{ github.sha }}" \
             -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/backendapp:${{ github.sha }}"
 
