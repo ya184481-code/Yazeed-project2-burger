@@ -1,24 +1,22 @@
+
 variable "rg_name" {
   type        = string
-  description = "resource group name"
-}
-variable "rg_location" {
-  type        = string
-  description = "resource group location"
+  description = "Resource group name"
 }
 
-variable "vnet_name" {
+variable "rg_location" {
   type        = string
-  description = "Name of the VNet"
+  description = "Resource group location"
 }
 
 variable "fe_port" {
   type        = number
-  description = "Port number of the frontend"
+  description = "Frontend port"
 }
+
 variable "be_port" {
   type        = number
-  description = "Port number of the backend"
+  description = "Backend port"
 }
 
 variable "db_server" {
@@ -44,59 +42,42 @@ variable "db_password" {
 
 variable "author" {
   type        = string
-  description = "Name of the author"
+  description = "Author name"
   default     = "terraform"
 }
+
 variable "resource_prefix" {
   type        = string
-  description = "Prefix for resources"
+  description = "Resource prefix"
   default     = "devops-tf"
 }
+
 variable "subnet_fe_id" {
   type        = string
-  description = "ID of the frontend subnet"
+  description = "ID of frontend subnet"
 }
+
 variable "subnet_be_id" {
   type        = string
-  description = "ID of the backend subnet"
+  description = "ID of backend subnet"
 }
+
 variable "subnet_agw_id" {
   type        = string
-  description = "ID of the agw subnet"
+  description = "ID of AGW subnet"
 }
-variable "subnet_agw_cidr" {
-  type        = string
-  description = "CIDR of the agw subnet"
-}
-variable "fe_app_id" {
-  type        = string
-  description = "ID of the frontend container app"
-}
-variable "be_app_id" {
-  type        = string
-  description = "ID of the backend container app"
-}
-variable "vnet_id" {
-  type        = string
-  description = "ID of the VNet"
-}
-variable "private_endpoint_subnet_id" {
-  type        = string
-  description = "ID of PE subnet"
-}
-variable "mssql_server_name" {
-  type        = string
-  description = "Name of Azure SQL server"
-}
+
 variable "agw_ip" {
   type        = string
-  description = "IP of AGW"
+  description = "IP of Application Gateway"
 }
-variable "be_image_name_and_tag" {
-  type        = string
-  description = "The name and tag of the backend image on dockerhub: username/image:tag"
-}
+
 variable "fe_image_name_and_tag" {
   type        = string
-  description = "The name and tag of the frontend image on dockerhub: username/image:tag"
+  description = "Frontend image: username/image:tag"
+}
+
+variable "be_image_name_and_tag" {
+  type        = string
+  description = "Backend image: username/image:tag"
 }

@@ -8,6 +8,7 @@ locals {
   fe_sku               = "P1v3"
 }
 
+# ==== Service Plans ====
 resource "azurerm_service_plan" "service_plan_fe" {
   name                = local.service_plan_name_fe
   resource_group_name = var.rg_name
@@ -24,15 +25,16 @@ resource "azurerm_service_plan" "service_plan_be" {
   sku_name            = local.be_sku
 }
 
+# ==== Frontend App ====
 resource "azurerm_linux_web_app" "fe_app" {
   name                          = local.fe_app_name
   location                      = var.rg_location
   resource_group_name           = var.rg_name
   service_plan_id               = azurerm_service_plan.service_plan_fe.id
-  virtual_network_subnet_id     = azurerm_subnet.fe_subnet.id
+  virtual_network_subnet_id     = var.subnet_fe_id
   public_network_access_enabled = local.public_access
 
-  depends_on = [azurerm_subnet.fe_subnet]
+  depends_on = [var.subnet_fe_id]
 
   site_config {
     always_on = true
@@ -45,7 +47,7 @@ resource "azurerm_linux_web_app" "fe_app" {
       name                      = "allow-agw"
       priority                  = 100
       action                    = "Allow"
-      virtual_network_subnet_id = azurerm_subnet.agw_subnet.id
+      virtual_network_subnet_id = var.subnet_agw_id
     }
     ip_restriction {
       name       = "deny-all"
@@ -60,18 +62,19 @@ resource "azurerm_linux_web_app" "fe_app" {
   }
 }
 
+# ==== Backend App ====
 resource "azurerm_linux_web_app" "be_app" {
   name                          = local.be_app_name
   location                      = var.rg_location
   resource_group_name           = var.rg_name
   service_plan_id               = azurerm_service_plan.service_plan_be.id
-  virtual_network_subnet_id     = azurerm_subnet.be_subnet.id
+  virtual_network_subnet_id     = var.subnet_be_id
   vnet_image_pull_enabled       = true
   public_network_access_enabled = local.public_access
 
   depends_on = [
-    azurerm_subnet.be_subnet,
-    azurerm_application_gateway.agw
+    var.subnet_be_id,
+    var.agw_ip
   ]
 
   site_config {
@@ -88,7 +91,7 @@ resource "azurerm_linux_web_app" "be_app" {
       name                      = "allow-agw"
       priority                  = 100
       action                    = "Allow"
-      virtual_network_subnet_id = azurerm_subnet.agw_subnet.id
+      virtual_network_subnet_id = var.subnet_agw_id
     }
     ip_restriction {
       name       = "deny-all"
