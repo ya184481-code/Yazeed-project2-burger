@@ -1,0 +1,14 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+coverage/
+
+# VS Code / OS
+.vscode/
+.DS_Store
