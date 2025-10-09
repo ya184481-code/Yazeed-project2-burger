@@ -1,0 +1,68 @@
+name: Terraform Plan & Apply
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  TF_AUTHOR: "ibrahim-221"
+  TF_RESOURCE_PREFIX: "ibra-53"
+  TF_RG_NAME: "ibra-new22"
+  TF_RG_LOCATION: "canadacentral"
+  TF_CONTACT_NAME: "Ibrahim"
+  TF_CONTACT_EMAIL: "ibrahim@example.com"
+  TF_FE_PORT: 80
+  TF_BE_PORT: 8080
+
+  FRONT_IMAGE_NAME: frontendapp
+  BACK_IMAGE_NAME: backendapp
+
+jobs:
+  terraform-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          auth-type: 'service-principal'
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init -input=false
+
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: |
+          terraform plan -input=false -out=tfplan \
+            -var "author=${{ env.TF_AUTHOR }}" \
+            -var "resource_prefix=${{ env.TF_RESOURCE_PREFIX }}" \
+            -var "resource_group_name=${{ env.TF_RG_NAME }}" \
+            -var "resource_group_location=${{ env.TF_RG_LOCATION }}" \
+            -var "contact_person_name=${{ env.TF_CONTACT_NAME }}" \
+            -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
+            -var "fe_port=${{ env.TF_FE_PORT }}" \
+            -var "be_port=${{ env.TF_BE_PORT }}" \
+            -var "db_password=${{ secrets.TF_DB_PASSWORD }}" \
+            -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/frontendapp:latest" \
+            -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/backendapp:latest"
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        working-directory: ./terraform
+        run: terraform apply -input=false -auto-approve tfplan
