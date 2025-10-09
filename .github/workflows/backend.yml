@@ -1,20 +1,18 @@
-name: Build & Push Backend Docker Image
+name: Build Backend
 
 on:
-  push:
-    paths:
-      - 'backend/**'
-    branches: [ main ]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build Frontend"]
+    types:
+      - completed
 
 env:
   BACK_DIR: ./backend
   BACK_IMAGE_NAME: backendapp
 
 jobs:
-  build-and-push-backend:
+  build-backend:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,18 +21,3 @@ jobs:
         run: |
           cd ${{ env.BACK_DIR }}
           mvn clean package -DskipTests
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build & Push Backend Image
-        uses: docker/build-push-action@v4
-        with:
-          context: ${{ env.BACK_DIR }}
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACK_IMAGE_NAME }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACK_IMAGE_NAME }}:${{ github.sha }}
