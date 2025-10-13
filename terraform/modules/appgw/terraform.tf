@@ -46,20 +46,18 @@ resource "azurerm_application_gateway" "agw" {
   backend_http_settings {
     name                  = local.http_setting_name_fe
     cookie_based_affinity = "Disabled"
-
-    protocol                            = "Https"
-    request_timeout                     = 60
-    port                                = local.https_port
+    protocol              = "Http"
+    request_timeout       = 60
+    port                  = 80
     pick_host_name_from_backend_address = true
-    probe_name                          = local.pe_probe_fe
+    probe_name            = local.pe_probe_fe
   }
   backend_http_settings {
     name                  = local.http_setting_name_be
     cookie_based_affinity = "Disabled"
-    protocol              = "Https"
+    protocol              = "Http"
     request_timeout       = 60
-    # Changed
-    port                                = local.https_port
+    port                  = 8080
     pick_host_name_from_backend_address = true
     probe_name                          = local.pe_probe_be
   }
@@ -98,24 +96,24 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   probe {
-    interval                                  = 120
+    interval                                  = 30
     name                                      = local.pe_probe_be
-    port                                      = local.https_port
+    port                                      = 80
     path                                      = "/actuator/health"
-    timeout                                   = 60
+    timeout                                   = 30
     unhealthy_threshold                       = 3
     pick_host_name_from_backend_http_settings = true
-    protocol                                  = "Https"
+    protocol                                  = "Http"
   }
   probe {
     interval                                  = 60
     name                                      = local.pe_probe_fe
-    port                                      = local.https_port
+    port                                      = 80
     path                                      = "/"
     timeout                                   = 60
     unhealthy_threshold                       = 3
     pick_host_name_from_backend_http_settings = true
-    protocol                                  = "Https"
+    protocol                                  = "Http"
   }
 }
 

@@ -22,7 +22,7 @@ resource "azurerm_linux_web_app" "fe_app" {
     application_stack {
       docker_image_name = var.fe_image_name_and_tag
     }
-    health_check_path                 = "/health"
+  health_check_path                 = "/"
     health_check_eviction_time_in_min = 5
     ip_restriction {
       name                      = "allow-agw"
@@ -40,6 +40,8 @@ resource "azurerm_linux_web_app" "fe_app" {
 
   app_settings = {
     "VITE_API_BASE_URL" = "http://${var.agw_ip}"
+    "PORT" = "80"
+    "WEBSITE_PORT" = "80"
   }
 
 }
@@ -77,8 +79,12 @@ resource "azurerm_linux_web_app" "be_app" {
     }
   }
 
-  app_settings = {
-    SERVER_PORT              = var.be_port
+    app_settings = {
+    SERVER_PORT              = 8080
+    ASPNETCORE_URLS          = "http://+:8080"
+    PORT                     = "8080"
+    WEBSITE_PORT             = "8080"
+
     DB_NAME                  = var.db_name
     DB_USERNAME              = var.db_user
     DB_PASSWORD              = var.db_password
@@ -86,8 +92,9 @@ resource "azurerm_linux_web_app" "be_app" {
     DB_HOST                  = var.db_server
     DB_PORT                  = 1433
     SPRING_PROFILES_ACTIVE   = "azure"
-    CORS_ALLOWED_ORIGINS              = var.agw_ip
+    CORS_ALLOWED_ORIGINS     = var.agw_ip
   }
+
 
   # ======= هنا تضيف lifecycle =======
   lifecycle {

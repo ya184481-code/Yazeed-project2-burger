@@ -1,0 +1,10 @@
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/service/CartServiceTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/service/IngredientServiceTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/controller/CartControllerTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/controller/OrderControllerTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/repository/OrderRepositoryTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/repository/DataInitializationTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/repository/IngredientRepositoryTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/repository/CartItemRepositoryTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/controller/IngredientControllerTest.java
+/mnt/c/Users/ya184/Yazeed-project2/Yazeed-project-burger/backend/src/test/java/com/burgerbuilder/service/OrderServiceTest.java

@@ -14,14 +14,17 @@ variable "author" {
 variable "resource_prefix" {
   type        = string
   description = "Resource prefix to add to the names"
+  default     = "yazeed"
 }
 variable "resource_group_location" {
   type        = string
   description = "Resource group location"
+  default     = "central india"
 }
 variable "resource_group_name" {
   type        = string
   description = "Resource group name"
+  default     = "RG-Yazeed-project2"
 }
 variable "contact_person_name" {
   type        = string
@@ -48,8 +51,10 @@ variable "db_admin" {
 variable "be_image_name_and_tag" {
   type        = string
   description = "The name and tag of the backend image on dockerhub: username/image:tag"
+  default     = "yazeed10/yazeed-burger-backend:latest"
 }
 variable "fe_image_name_and_tag" {
   type        = string
   description = "The name and tag of the frontend image on dockerhub: username/image:tag"
+  default     = "yazeed10/yazeed-burger-frontend:latest"
 }

@@ -1,0 +1,10 @@
+com/burgerbuilder/controller/IngredientControllerTest.class
+com/burgerbuilder/service/IngredientServiceTest.class
+com/burgerbuilder/service/CartServiceTest.class
+com/burgerbuilder/service/OrderServiceTest.class
+com/burgerbuilder/controller/CartControllerTest.class
+com/burgerbuilder/repository/CartItemRepositoryTest.class
+com/burgerbuilder/repository/DataInitializationTest.class
+com/burgerbuilder/repository/OrderRepositoryTest.class
+com/burgerbuilder/controller/OrderControllerTest.class
+com/burgerbuilder/repository/IngredientRepositoryTest.class

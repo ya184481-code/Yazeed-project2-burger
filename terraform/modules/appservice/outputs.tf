@@ -1,10 +1,3 @@
-# output "fe_app_private_ip" {
-#   value = azurerm_private_endpoint.fe_pe.private_service_connection[0].private_ip_address
-# }
-
-# output "be_app_private_ip" {
-#   value = azurerm_private_endpoint.be_pe.private_service_connection[0].private_ip_address
-# }
 output "service_plan_fe_id" {
   value = azurerm_service_plan.service_plan_fe.id
 }

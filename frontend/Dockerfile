@@ -1,42 +1,47 @@
-# Multi-stage build for React app
-FROM node:20-alpine as build
+# Stage 1: Build the application
+FROM node:20-alpine AS build
 
-# Set working directory
+# Set working directory inside the docker container
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy source code
+# Copy source code and build
 COPY . .
+
+# Build argument for API URL
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
+# Debug: Print the environment variable to verify it's set
+RUN echo "VITE_API_BASE_URL is set to: $VITE_API_BASE_URL"
+
+RUN chmod +x node_modules/.bin/tsc || true
 
 # Build the application
 RUN npm run build
 
-# Production stage
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
 
-# Copy built app to nginx (Vite uses 'dist' directory)
-COPY --from=build /app/dist /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
 
-# Copy nginx configuration
+# Copy built assets from build stage to the current working directory of the container
+COPY --from=build /app/dist .
+
+# Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Create entrypoint script to inject runtime config
-RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'echo "window.APP_CONFIG = { API_BASE_URL: \"${VITE_API_BASE_URL:-http://localhost:8080}\" };" > /usr/share/nginx/html/config.js' >> /docker-entrypoint.sh && \
-    echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
+# Add Healthcheck for Azure App Service and Application Gateway
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/health || exit 1
 
-# Expose port
+# Expose port 80
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
-
-# Start with entrypoint script
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
