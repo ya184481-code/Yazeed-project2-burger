@@ -1,0 +1,39 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install & Build
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+      - name: Docker Build & Push
+        run: |
+      - name: Azure Web App Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+      - name: Azure Web App Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          docker build -t ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest ./frontend
+          echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+          docker push ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest
+      - name: Azure Web App Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: yazeed-fe-app-yazeed
+          images: ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest
