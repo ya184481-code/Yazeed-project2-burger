@@ -129,8 +129,8 @@ jobs:
             -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
             -var "fe_port=${{ env.TF_FE_PORT }}" \
             -var "be_port=${{ env.TF_BE_PORT }}" \
-            -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/yazeed-burger-frontend:${{ github.sha }}" \
-            -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/yazeed-burger-backend:${{ github.sha }}"
+            -var "fe_image_name_and_tag=yazeed10/yazeed-burger-frontend:latest" \
+            -var "be_image_name_and_tag=yazeed10/yazeed-burger-backend:latest"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
