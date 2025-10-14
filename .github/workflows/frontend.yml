@@ -29,11 +29,11 @@ jobs:
       - name: Azure Web App Deploy
         uses: azure/webapps-deploy@v3
         with:
-          docker build -t ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest ./frontend
+          docker build -t yazeed10/yazeed-burger-frontend:latest ./frontend
           echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-          docker push ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest
+          docker push yazeed10/yazeed-burger-frontend:latest
       - name: Azure Web App Deploy
         uses: azure/webapps-deploy@v3
         with:
           app-name: yazeed-fe-app-yazeed
-          images: ${{ secrets.DOCKER_USER }}/yazeed-burger-frontend:latest
+          images: yazeed10/yazeed-burger-frontend:latest

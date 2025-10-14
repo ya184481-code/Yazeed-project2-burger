@@ -86,8 +86,7 @@ jobs:
           context: ${{ env.FRONT_DIR }}
           push: true
           tags: |
-            ${{ secrets.DOCKER_USER }}/${{ env.FRONT_IMAGE_NAME }}:${{ github.sha }}
-            ${{ secrets.DOCKER_USER }}/${{ env.FRONT_IMAGE_NAME }}:latest
+            yazeed10/yazeed-burger-frontend:latest
 
       - name: Build & Push backend image
         uses: docker/build-push-action@v4
@@ -95,8 +94,7 @@ jobs:
           context: ${{ env.BACK_DIR }}
           push: true
           tags: |
-            ${{ secrets.DOCKER_USER }}/${{ env.BACK_IMAGE_NAME }}:${{ github.sha }}
-            ${{ secrets.DOCKER_USER }}/${{ env.BACK_IMAGE_NAME }}:latest
+            yazeed10/yazeed-burger-backend:latest
 
       - name: Azure Login (Service Principal)
         uses: azure/login@v2
@@ -131,8 +129,8 @@ jobs:
             -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
             -var "fe_port=${{ env.TF_FE_PORT }}" \
             -var "be_port=${{ env.TF_BE_PORT }}" \
-            -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/frontendapp:${{ github.sha }}" \
-            -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/backendapp:${{ github.sha }}"
+            -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}yazeed-burger-frontend{{ github.sha }}" \
+            -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}yazeed-burger-backend{{ github.sha }}"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
