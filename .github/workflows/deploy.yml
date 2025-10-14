@@ -111,6 +111,11 @@ jobs:
       - name: Terraform Init
         working-directory: ./terraform
         run: terraform init -input=false
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Terraform Plan
         working-directory: ./terraform
@@ -124,13 +129,23 @@ jobs:
             -var "resource_group_location=${{ env.TF_RG_LOCATION }}" \
             -var "contact_person_name=${{ env.TF_CONTACT_NAME }}" \
             -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
-            -var "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
             -var "fe_port=${{ env.TF_FE_PORT }}" \
             -var "be_port=${{ env.TF_BE_PORT }}" \
             -var "fe_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/frontendapp:${{ github.sha }}" \
             -var "be_image_name_and_tag=${{ secrets.DOCKERHUB_USERNAME }}/backendapp:${{ github.sha }}"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         working-directory: ./terraform
         run: terraform apply -input=false -auto-approve tfplan
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
