@@ -56,28 +56,26 @@ resource "azurerm_linux_web_app" "be_app" {
   public_network_access_enabled = local.public_access
 
   site_config {
-    application_stack {
-      docker_image_name   = var.be_image_name_and_tag
-      docker_registry_url = "https://index.docker.io"
-    }
-    cors {
-      allowed_origins = [var.agw_ip]
-    }
-    health_check_path                 = "/actuator/health"
-    health_check_eviction_time_in_min = 5
-    ip_restriction {
-      name                      = "allow-agw"
-      priority                  = 100
-      action                    = "Allow"
-      virtual_network_subnet_id = var.subnet_agw_id
-    }
-    ip_restriction {
-      name       = "deny-all"
-      priority   = 200
-      action     = "Deny"
-      ip_address = "0.0.0.0/0"
-    }
+  always_on = true
+  application_stack {
+    docker_image_name   = var.fe_image_name_and_tag
+    docker_registry_url = "https://index.docker.io"
   }
+  health_check_path                 = "/"
+  health_check_eviction_time_in_min = 5
+  ip_restriction {
+    name                      = "allow-agw"
+    priority                  = 100
+    action                    = "Allow"
+    virtual_network_subnet_id = var.subnet_agw_id
+  }
+  ip_restriction {
+    name       = "deny-all"
+    priority   = 200
+    action     = "Deny"
+    ip_address = "0.0.0.0/0"
+  }
+}
 
     app_settings = {
     SERVER_PORT              = 8080
