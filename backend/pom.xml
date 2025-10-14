@@ -67,11 +67,11 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- H2 Database for Tests -->
+
+        <!-- H2 Database for Local Development and Tests -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!-- Spring Boot Actuator for Health Checks -->
