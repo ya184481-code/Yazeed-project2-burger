@@ -58,7 +58,7 @@ resource "azurerm_linux_web_app" "be_app" {
   site_config {
   always_on = true
   application_stack {
-    docker_image_name   = var.fe_image_name_and_tag
+    docker_image_name   = var.be_image_name_and_tag
     docker_registry_url = "https://index.docker.io"
   }
   health_check_path                 = "/"
