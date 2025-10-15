@@ -10,5 +10,5 @@ be_port                 = 8080
 fe_port                 = 80
 db_admin                = "yazeed"
 db_password             = "Db!2025@Complex#Pass1"
-be_image_name_and_tag   = "yazeed10/yazeed-burger-backend:latest"
-fe_image_name_and_tag   = "yazeed10/yazeed-burger-frontend:latest"
+be_image_name_and_tag   = "yazeed10/yazeed-burger-backend:1.0.0"
+fe_image_name_and_tag   = "yazeed10/yazeed-burger-frontend:1.0.0"

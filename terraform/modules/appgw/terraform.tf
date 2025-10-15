@@ -57,7 +57,7 @@ resource "azurerm_application_gateway" "agw" {
     cookie_based_affinity = "Disabled"
     protocol              = "Http"
     request_timeout       = 60
-    port                  = 8080
+    port                  = 80
     pick_host_name_from_backend_address = true
     probe_name                          = local.pe_probe_be
   }
@@ -79,7 +79,7 @@ resource "azurerm_application_gateway" "agw" {
       name                       = "redir-to-fe"
     }
     path_rule {
-      paths                      = ["/api/*", "/actuator/health"]
+      paths                      = ["/api/*"]
       backend_address_pool_name  = local.backend_address_pool_name_be
       backend_http_settings_name = local.http_setting_name_be
       name                       = "redir-to-be"
