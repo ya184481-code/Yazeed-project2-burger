@@ -19,8 +19,8 @@ env:
   FRONT_DIR: ./frontend
   BACK_DIR: ./backend
 
-  FRONT_IMAGE_NAME: frontendapp
-  BACK_IMAGE_NAME: backendapp
+  FRONT_IMAGE_NAME: yazeed10/yazeed-burger-frontend:1.0.0
+  BACK_IMAGE_NAME: yazeed10/yazeed-burger-backend:1.0.0
 
 jobs:
   build-frontend:
@@ -86,7 +86,7 @@ jobs:
           context: ${{ env.FRONT_DIR }}
           push: true
           tags: |
-            yazeed10/yazeed-burger-frontend:latest
+            yazeed10/yazeed-burger-frontend:1.0.0
 
       - name: Build & Push backend image
         uses: docker/build-push-action@v4
@@ -94,7 +94,7 @@ jobs:
           context: ${{ env.BACK_DIR }}
           push: true
           tags: |
-            yazeed10/yazeed-burger-backend:latest
+            yazeed10/yazeed-burger-backend:1.0.0
 
       - name: Azure Login (Service Principal)
         uses: azure/login@v2
@@ -129,8 +129,8 @@ jobs:
             -var "contact_person_email=${{ env.TF_CONTACT_EMAIL }}" \
             -var "fe_port=${{ env.TF_FE_PORT }}" \
             -var "be_port=${{ env.TF_BE_PORT }}" \
-            -var "fe_image_name_and_tag=yazeed10/yazeed-burger-frontend:latest" \
-            -var "be_image_name_and_tag=yazeed10/yazeed-burger-backend:latest"
+            -var "fe_image_name_and_tag=yazeed10/yazeed-burger-frontend:1.0.0" \
+            -var "be_image_name_and_tag=yazeed10/yazeed-burger-backend:1.0.0"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
